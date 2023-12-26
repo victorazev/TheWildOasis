@@ -14,13 +14,15 @@ function App() {
 		<>
 			<GlobalStyles />
 			<StyledApp>
-				<Heading>The Wild Oasis</Heading>
+				<Heading as="h1">The Wild Oasis</Heading>
+				<Heading as="h2">Choose and option</Heading>
 				<Button onClick={() => alert('Check in')}>
 					Check in
 				</Button>
 				<Button onClick={() => alert('Check out')}>
 					Check out
 				</Button>
+				<Heading as="h3">Forms</Heading>
 				<Input type="number" placeholder="Number of guests" />
 			</StyledApp>
 		</>
