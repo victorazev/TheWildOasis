@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import Input from '../../ui/Input';
 import Form from '../../ui/Form';
 import Button from '../../ui/Button';
@@ -37,7 +36,7 @@ function CreateCabinForm() {
 	});
 
 	function onSubmit(data) {
-		mutate(data);
+		mutate({ ...data, image: data.image[0] });
 	}
 
 	return (
@@ -128,6 +127,9 @@ function CreateCabinForm() {
 					id="image"
 					disabled={isCreating}
 					accept="image/*"
+					{...register('image', {
+						required: 'This field is required to add a cabin',
+					})}
 				/>
 			</FormRow>
 
