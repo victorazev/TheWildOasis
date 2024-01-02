@@ -1,14 +1,15 @@
 /* eslint-disable react/prop-types */
+import { useState } from 'react';
 import styled from 'styled-components';
 import { formatCurrency } from '../../utils/helpers';
 import {
 	useMutation,
 	useQueryClient,
 } from '@tanstack/react-query';
-import { deleteCabin } from '../../services/apiCabins';
 import toast from 'react-hot-toast';
-import { useState } from 'react';
+
 import CreateCabinForm from './CreateCabinForm';
+import { deleteCabin } from '../../services/apiCabins';
 
 const TableRow = styled.div`
 	display: grid;
@@ -82,7 +83,11 @@ function CabinRow({ cabin }) {
 				<Cabin>{name}</Cabin>
 				<div>Fits up to {maxCapacity} guests</div>
 				<Price>{formatCurrency(regularPrice)}</Price>
-				<Discount>{formatCurrency(discount)}</Discount>
+				{discount ? (
+					<Discount>{formatCurrency(discount)}</Discount>
+				) : (
+					<span>&mdash;</span>
+				)}
 				<div>
 					<button onClick={() => setShowform((show) => !show)}>
 						Edit
