@@ -1,15 +1,10 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
 import styled from 'styled-components';
-import { formatCurrency } from '../../utils/helpers';
-import {
-	useMutation,
-	useQueryClient,
-} from '@tanstack/react-query';
-import toast from 'react-hot-toast';
+import { useState } from 'react';
 
 import CreateCabinForm from './CreateCabinForm';
-import { deleteCabin } from '../../services/apiCabins';
+import { useDeleteCabin } from './useDeleteCabin';
+import { formatCurrency } from '../../utils/helpers';
 
 const TableRow = styled.div`
 	display: grid;
@@ -62,19 +57,7 @@ function CabinRow({ cabin }) {
 		image,
 	} = cabin;
 
-	const queryClient = useQueryClient();
-
-	const { isLoading: isDeleting, mutate } = useMutation({
-		mutationFn: deleteCabin,
-		onSuccess: () => {
-			toast.success('Cabin successfully deleted');
-
-			queryClient.invalidateQueries({
-				queryKey: ['cabins'],
-			});
-		},
-		onError: (err) => toast.error(err.message),
-	});
+	const { isDeleting, deleteCabin } = useDeleteCabin();
 
 	return (
 		<>
@@ -93,7 +76,7 @@ function CabinRow({ cabin }) {
 						Edit
 					</button>
 					<button
-						onClick={() => mutate(cabinId)}
+						onClick={() => deleteCabin(cabinId)}
 						disabled={isDeleting}
 					>
 						Delete
