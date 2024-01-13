@@ -1,14 +1,25 @@
 import { useState } from 'react';
+
 import Button from '../../ui/Button';
 import Form from '../../ui/Form';
 import Input from '../../ui/Input';
 import FormRowVertical from '../../ui/FormRowVertical';
+import SpinnerMini from '../../ui/SpinnerMini';
+
+import { useLogin } from './useLogin';
 
 function LoginForm() {
-	const [email, setEmail] = useState('');
+	const [email, setEmail] = useState('victor@exemple.com');
 	const [password, setPassword] = useState('');
 
-	function handleSubmit() {}
+	const { login, isLoading } = useLogin();
+
+	function handleSubmit(evt) {
+		evt.preventDefault();
+		if (!email || !password) return;
+
+		login({ email, password });
+	}
 
 	return (
 		<Form onSubmit={handleSubmit}>
@@ -33,7 +44,9 @@ function LoginForm() {
 				/>
 			</FormRowVertical>
 			<FormRowVertical>
-				<Button size="large">Login</Button>
+				<Button size="large" disabled={isLoading}>
+					{!isLoading ? 'Login' : <SpinnerMini />}
+				</Button>
 			</FormRowVertical>
 		</Form>
 	);
