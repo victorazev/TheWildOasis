@@ -23,6 +23,7 @@ import Settings from './pages/Settings';
 import Users from './pages/Users';
 import Booking from './pages/Booking';
 import Checkin from './pages/Checkin';
+import ProtectedRoute from './ui/ProtectedRoute';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -38,10 +39,17 @@ function App() {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<ReactQueryDevtools initialIsOpen={false} />
+
 			<GlobalStyles />
 			<BrowserRouter>
 				<Routes>
-					<Route element={<AppLayout />}>
+					<Route
+						element={
+							<ProtectedRoute>
+								<AppLayout />
+							</ProtectedRoute>
+						}
+					>
 						<Route
 							index
 							element={<Navigate replace to="dashboard" />}
@@ -65,6 +73,7 @@ function App() {
 					<Route path="*" element={<PageNotFound />} />
 				</Routes>
 			</BrowserRouter>
+
 			<Toaster
 				position="top-center"
 				gutter={12}
