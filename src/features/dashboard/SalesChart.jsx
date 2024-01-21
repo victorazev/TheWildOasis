@@ -54,8 +54,6 @@ function SalesChart({ bookings, numDays }) {
 			.reduce((acc, cur) => acc + cur.extrasPrice, 0),
 	}));
 
-	console.log(data);
-
 	const colors = isDarkMode
 		? {
 				totalSales: { stroke: '#4f46e5', fill: '#4f46e5' },
