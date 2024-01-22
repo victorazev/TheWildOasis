@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
+import styled from 'styled-components';
 import { createContext, useContext, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { HiEllipsisVertical } from 'react-icons/hi2';
-import styled from 'styled-components';
+
 import { useOutsideClick } from '../hooks/useOutsideClick';
 
 const Menu = styled.div`
@@ -89,6 +90,8 @@ function Toggle({ id }) {
 		useContext(MenusContext);
 
 	function handleClick(evt) {
+		evt.stopPropagation();
+
 		const rect = evt.target
 			.closest('button')
 			.getBoundingClientRect();
@@ -109,7 +112,7 @@ function Toggle({ id }) {
 
 function List({ id, children }) {
 	const { openId, position, close } = useContext(MenusContext);
-	const ref = useOutsideClick(close);
+	const ref = useOutsideClick(close, false);
 
 	if (openId !== id) return null;
 
