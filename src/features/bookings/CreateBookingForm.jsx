@@ -1,40 +1,31 @@
 /* eslint-disable react/prop-types */
-import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 import { useGuests } from '../guests/useGuests';
 import { useCabins } from '../cabins/useCabins';
 
 import Form from '../../ui/Form';
 import FormRow from '../../ui/FormRow';
-import Input from '../../ui/Input';
 import Button from '../../ui/Button';
 import Spinner from '../../ui/Spinner';
 import Select from '../../ui/Select';
+import { differenceInBusinessDays } from 'date-fns';
 
 function CreateBookingForm({ onCloseModal }) {
-	const [guestSelected, setGuestSelected] = useState('');
-	const [cabinSelected, setCabinSelected] = useState('');
-
 	const { guests, isLoading: isLoadingGuests } = useGuests();
 
 	const { cabins, isLoading: isLoadingCabins } = useCabins();
 
-	const { handleSubmit } = useForm();
+	const { handleSubmit, control } = useForm({
+		defaultValues: {
+			guestId: '',
+			cabinId: '',
+		},
+	});
 
 	if (isLoadingGuests || isLoadingCabins) return <Spinner />;
-
-	function onSubmit(data) {
-		console.log(data);
-	}
-
-	const handleChangeGuest = (evt) => {
-		setGuestSelected(evt.target.value);
-	};
-
-	const handleChangeCabin = (evt) => {
-		setCabinSelected(evt.target.value);
-	};
 
 	const guestOptions = guests.map((guest) => ({
 		value: guest.id,
@@ -46,32 +37,99 @@ function CreateBookingForm({ onCloseModal }) {
 		label: cabin.name,
 	}));
 
+	function onSubmit(data) {
+		// compute num nights, get cabin price, get extra prices
+		// set status to unconfirmed, has breakfast to false, isPaid to false
+		const numNights = differenceInBusinessDays(
+			data.endDate,
+			data.startDate,
+		);
+
+		const selectedCabin = cabins.filter(
+			(cabin) => cabin.id == data.cabinId,
+		);
+
+		const totalPrice =
+			numNights * selectedCabin[0].regularPrice -
+			numNights * selectedCabin[0].discount;
+
+		const extrasPrice = 0;
+		const hasBreakfast = 'false';
+
+		console.log(selectedCabin[0]);
+
+		data = {
+			...data,
+			totalPrice,
+			numNights,
+			extrasPrice,
+			hasBreakfast,
+			status: 'unconfirmed',
+			isPaid: 'false',
+		};
+		console.log(data);
+	}
+
 	return (
 		<Form onSubmit={handleSubmit(onSubmit)}>
 			<FormRow label="Guest">
-				<Select
-					options={guestOptions}
-					value={guestSelected}
-					type="white"
-					onChange={handleChangeGuest}
+				<Controller
+					name="guestId"
+					control={control}
+					render={({ field: { onChange, value } }) => (
+						<Select
+							options={guestOptions}
+							value={value}
+							type="white"
+							onChange={onChange}
+						/>
+					)}
 				/>
 			</FormRow>
 
 			<FormRow label="Cabin">
-				<Select
-					options={cabinOptions}
-					value={cabinSelected}
-					type="white"
-					onChange={handleChangeCabin}
+				<Controller
+					name="cabinId"
+					control={control}
+					render={({ field: { onChange, value } }) => (
+						<Select
+							options={cabinOptions}
+							value={value}
+							type="white"
+							onChange={onChange}
+						/>
+					)}
 				/>
 			</FormRow>
 
-			<FormRow label="Start date">
-				<Input type="text" id="startDate" />
+			<FormRow label="Pick the start date">
+				<Controller
+					control={control}
+					name="startDate"
+					render={({ field: { onChange, value } }) => (
+						<DatePicker
+							showIcon
+							onChange={onChange}
+							selected={value}
+							dateFormat="dd/MM/yyyy"
+						/>
+					)}
+				/>
 			</FormRow>
 
-			<FormRow label="End date">
-				<Input type="text" id="endDate" />
+			<FormRow label="Pick the end date">
+				<Controller
+					control={control}
+					name="endDate"
+					render={({ field: { onChange, value } }) => (
+						<DatePicker
+							showIcon
+							onChange={onChange}
+							selected={value}
+							dateFormat="dd/MM/yyyy"
+						/>
+					)}
+				/>
 			</FormRow>
 
 			<FormRow>
@@ -82,6 +140,7 @@ function CreateBookingForm({ onCloseModal }) {
 				>
 					Cancel
 				</Button>
+
 				<Button>Add new booking</Button>
 			</FormRow>
 		</Form>
