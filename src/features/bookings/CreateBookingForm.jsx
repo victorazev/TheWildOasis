@@ -23,7 +23,6 @@ import Checkbox from '../../ui/Checkbox';
 function CreateBookingForm({ onCloseModal }) {
 	const [options, setOptions] = useState([]);
 	const [isSelectedCabin, setIsSelectedCabin] = useState(false);
-	const [numGuests, setNumGuests] = useState('');
 
 	const { guests, isLoading: isLoadingGuests } = useGuests();
 
@@ -34,7 +33,7 @@ function CreateBookingForm({ onCloseModal }) {
 
 	const { createBooking, isCreating } = useCreateBooking();
 
-	const { handleSubmit, control, setValue, getValues } =
+	const { handleSubmit, control, setValue, getValues, watch } =
 		useForm({
 			defaultValues: {
 				guestId: '',
@@ -44,6 +43,8 @@ function CreateBookingForm({ onCloseModal }) {
 				endDate: null,
 			},
 		});
+
+	const watchAllFields = watch();
 
 	if (isLoadingGuests || isLoadingCabins || isLoadingSettings)
 		return <Spinner />;
@@ -84,7 +85,6 @@ function CreateBookingForm({ onCloseModal }) {
 
 	function handleChangeGuests(evt) {
 		setValue('numGuests', evt.target.value);
-		setNumGuests(evt.target.value);
 	}
 
 	function onSubmit(data) {
@@ -106,7 +106,7 @@ function CreateBookingForm({ onCloseModal }) {
 				getValues('endDate'),
 				getValues('startDate'),
 			) *
-			numGuests *
+			getValues('numGuests') *
 			settings.breakfastPrice;
 
 		const totalPrice = cabinPrice + extrasPrice;
@@ -147,14 +147,13 @@ function CreateBookingForm({ onCloseModal }) {
 				<Controller
 					name="cabinId"
 					control={control}
-					render={({ field: { onChange, value } }) => (
+					render={({ field: { value } }) => (
 						<Select
 							options={cabinOptions}
 							value={value}
 							type="white"
 							onChange={(evt) => {
 								handleChangeCabin(evt);
-								onChange;
 							}}
 							disabled={isCreating}
 						/>
@@ -166,14 +165,13 @@ function CreateBookingForm({ onCloseModal }) {
 				<Controller
 					name="numGuests"
 					control={control}
-					render={({ field: { onChange, value } }) => (
+					render={({ field: { value } }) => (
 						<Select
 							options={options}
 							value={value}
 							type="white"
 							onChange={(evt) => {
 								handleChangeGuests(evt);
-								onChange;
 							}}
 							disabled={isCreating || !isSelectedCabin}
 						/>
@@ -229,15 +227,15 @@ function CreateBookingForm({ onCloseModal }) {
 								Add breakfast for{' '}
 								{formatCurrency(settings.breakfastPrice)} per
 								guest?
-								{numGuests != '' &&
-								getValues('endDate') != null &&
-								getValues('startDate') != null
+								{watchAllFields.numGuests != '' &&
+								watchAllFields.endDate != null &&
+								watchAllFields.startDate != null
 									? ` Total of ${formatCurrency(
 											differenceInDays(
-												getValues('endDate'),
-												getValues('startDate'),
+												watchAllFields.endDate,
+												watchAllFields.startDate,
 											) *
-												numGuests *
+												watchAllFields.numGuests *
 												settings.breakfastPrice,
 									  )}`
 									: ''}
