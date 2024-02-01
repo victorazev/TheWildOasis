@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -10,8 +10,8 @@ import { useGuests } from '../guests/useGuests';
 import { useCabins } from '../cabins/useCabins';
 import { useCreateBooking } from './useCreateBooking';
 import { useSettings } from '../settings/useSettings';
-
 import { formatCurrency } from '../../utils/helpers';
+
 import Form from '../../ui/Form';
 import FormRow from '../../ui/FormRow';
 import Button from '../../ui/Button';
@@ -21,9 +21,6 @@ import DatePickerRow from '../../ui/DatePickerRow';
 import Checkbox from '../../ui/Checkbox';
 
 function CreateBookingForm({ onCloseModal }) {
-	const [options, setOptions] = useState([]);
-	const [isSelectedCabin, setIsSelectedCabin] = useState(false);
-
 	const { guests, isLoading: isLoadingGuests } = useGuests();
 
 	const { cabins, isLoading: isLoadingCabins } = useCabins();
@@ -46,6 +43,36 @@ function CreateBookingForm({ onCloseModal }) {
 
 	const watchAllFields = watch();
 
+	const options = useMemo(() => {
+		let numGuests = [];
+
+		const selectedCabin = cabins.find(
+			(cabin) => String(cabin.id) === watchAllFields.cabinId,
+		);
+
+		if (!selectedCabin) return numGuests;
+
+		const maxNumGuests = selectedCabin.maxCapacity;
+		const minGuests = Math.ceil(maxNumGuests / 2);
+
+		for (let i = minGuests; i <= maxNumGuests; i++) {
+			numGuests.push(i);
+		}
+
+		const totalGuestOptions = numGuests.map((num) => ({
+			value: num,
+			label: num,
+		}));
+
+		return totalGuestOptions;
+	}, [cabins, watchAllFields.cabinId]);
+
+	useEffect(() => {
+		if (options.length === 0) return;
+
+		setValue('numGuests', options[0].value);
+	}, [options, setValue, watchAllFields.cabinId]);
+
 	if (isLoadingGuests || isLoadingCabins || isLoadingSettings)
 		return <Spinner />;
 
@@ -61,26 +88,6 @@ function CreateBookingForm({ onCloseModal }) {
 
 	function handleChangeCabin(evt) {
 		setValue('cabinId', evt.target.value);
-
-		let numGuests = [];
-
-		const selectedCabin = cabins.filter(
-			(cabin) => cabin.id == evt.target.value,
-		);
-		const maxNumGuests = selectedCabin[0].maxCapacity;
-		const minGuests = Math.ceil(maxNumGuests / 2);
-
-		for (let i = minGuests; i <= maxNumGuests; i++) {
-			numGuests.push(i);
-		}
-
-		const totalGuestOptions = numGuests.map((num) => ({
-			value: num,
-			label: num,
-		}));
-
-		setOptions(totalGuestOptions);
-		setIsSelectedCabin(true);
 	}
 
 	function handleChangeGuests(evt) {
@@ -173,7 +180,9 @@ function CreateBookingForm({ onCloseModal }) {
 							onChange={(evt) => {
 								handleChangeGuests(evt);
 							}}
-							disabled={isCreating || !isSelectedCabin}
+							disabled={
+								isCreating || watchAllFields.cabinId === ''
+							}
 						/>
 					)}
 				/>
