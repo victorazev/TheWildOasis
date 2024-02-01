@@ -2,21 +2,25 @@
 import { Controller, useForm } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { differenceInBusinessDays } from 'date-fns';
 
 import { useGuests } from '../guests/useGuests';
 import { useCabins } from '../cabins/useCabins';
+import { useCreateBooking } from './useCreateBooking';
 
 import Form from '../../ui/Form';
 import FormRow from '../../ui/FormRow';
 import Button from '../../ui/Button';
 import Spinner from '../../ui/Spinner';
 import Select from '../../ui/Select';
-import { differenceInBusinessDays } from 'date-fns';
+import DatePickerRow from '../../ui/DatePickerRow';
 
 function CreateBookingForm({ onCloseModal }) {
 	const { guests, isLoading: isLoadingGuests } = useGuests();
 
 	const { cabins, isLoading: isLoadingCabins } = useCabins();
+
+	const { createBooking, isCreating } = useCreateBooking();
 
 	const { handleSubmit, control } = useForm({
 		defaultValues: {
@@ -38,8 +42,6 @@ function CreateBookingForm({ onCloseModal }) {
 	}));
 
 	function onSubmit(data) {
-		// compute num nights, get cabin price, get extra prices
-		// set status to unconfirmed, has breakfast to false, isPaid to false
 		const numNights = differenceInBusinessDays(
 			data.endDate,
 			data.startDate,
@@ -49,25 +51,31 @@ function CreateBookingForm({ onCloseModal }) {
 			(cabin) => cabin.id == data.cabinId,
 		);
 
-		const totalPrice =
+		const numGuests = selectedCabin[0].maxCapacity;
+
+		const cabinPrice =
 			numNights * selectedCabin[0].regularPrice -
 			numNights * selectedCabin[0].discount;
 
+		const hasBreakfast = false;
 		const extrasPrice = 0;
-		const hasBreakfast = 'false';
 
-		console.log(selectedCabin[0]);
+		const totalPrice = cabinPrice + extrasPrice;
 
-		data = {
+		const newBooking = {
 			...data,
+			numGuests,
 			totalPrice,
+			cabinPrice,
 			numNights,
 			extrasPrice,
 			hasBreakfast,
 			status: 'unconfirmed',
-			isPaid: 'false',
+			isPaid: false,
+			observations: '',
 		};
-		console.log(data);
+
+		createBooking(newBooking);
 	}
 
 	return (
@@ -82,6 +90,7 @@ function CreateBookingForm({ onCloseModal }) {
 							value={value}
 							type="white"
 							onChange={onChange}
+							disabled={isCreating}
 						/>
 					)}
 				/>
@@ -97,12 +106,13 @@ function CreateBookingForm({ onCloseModal }) {
 							value={value}
 							type="white"
 							onChange={onChange}
+							disabled={isCreating}
 						/>
 					)}
 				/>
 			</FormRow>
 
-			<FormRow label="Pick the start date">
+			<DatePickerRow label="Pick the start date">
 				<Controller
 					control={control}
 					name="startDate"
@@ -110,14 +120,16 @@ function CreateBookingForm({ onCloseModal }) {
 						<DatePicker
 							showIcon
 							onChange={onChange}
+							minDate={new Date()}
 							selected={value}
 							dateFormat="dd/MM/yyyy"
+							disabled={isCreating}
 						/>
 					)}
 				/>
-			</FormRow>
+			</DatePickerRow>
 
-			<FormRow label="Pick the end date">
+			<DatePickerRow label="Pick the end date">
 				<Controller
 					control={control}
 					name="endDate"
@@ -125,12 +137,14 @@ function CreateBookingForm({ onCloseModal }) {
 						<DatePicker
 							showIcon
 							onChange={onChange}
+							minDate={new Date()}
 							selected={value}
 							dateFormat="dd/MM/yyyy"
+							disabled={isCreating}
 						/>
 					)}
 				/>
-			</FormRow>
+			</DatePickerRow>
 
 			<FormRow>
 				<Button
