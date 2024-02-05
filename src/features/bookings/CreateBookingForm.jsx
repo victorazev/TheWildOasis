@@ -31,18 +31,25 @@ function CreateBookingForm({ onCloseModal }) {
 
 	const { createBooking, isCreating } = useCreateBooking();
 
-	const { handleSubmit, control, setValue, getValues, watch } =
-		useForm({
-			defaultValues: {
-				guestId: '',
-				cabinId: '',
-				numGuests: '',
-				startDate: null,
-				endDate: null,
-				hasBreakfast: false,
-				observations: '',
-			},
-		});
+	const {
+		handleSubmit,
+		control,
+		setValue,
+		getValues,
+		watch,
+		formState: { errors },
+		clearErrors,
+	} = useForm({
+		defaultValues: {
+			guestId: '',
+			cabinId: '',
+			numGuests: '',
+			startDate: null,
+			endDate: null,
+			hasBreakfast: false,
+			observations: '',
+		},
+	});
 
 	const watchAllFields = watch();
 
@@ -136,10 +143,20 @@ function CreateBookingForm({ onCloseModal }) {
 
 	return (
 		<Form onSubmit={handleSubmit(onSubmit)}>
-			<FormRow label="Guest">
+			<FormRow
+				label="Guest"
+				error={
+					errors.guestId
+						? 'The guest field is required to add a booking'
+						: ''
+				}
+			>
 				<Controller
 					name="guestId"
 					control={control}
+					rules={{
+						required: true,
+					}}
 					render={({ field: { onChange, value } }) => (
 						<Select
 							options={guestOptions}
@@ -147,15 +164,25 @@ function CreateBookingForm({ onCloseModal }) {
 							type="white"
 							onChange={onChange}
 							disabled={isCreating}
-						/>
+						></Select>
 					)}
 				/>
 			</FormRow>
 
-			<FormRow label="Cabin">
+			<FormRow
+				label="Cabin"
+				error={
+					errors?.cabinId
+						? 'The cabin field is required to add a booking'
+						: ''
+				}
+			>
 				<Controller
 					name="cabinId"
 					control={control}
+					rules={{
+						required: true,
+					}}
 					render={({ field: { value } }) => (
 						<Select
 							options={cabinOptions}
@@ -163,6 +190,7 @@ function CreateBookingForm({ onCloseModal }) {
 							type="white"
 							onChange={(evt) => {
 								handleChangeCabin(evt);
+								clearErrors('cabinId');
 							}}
 							disabled={isCreating}
 						/>
@@ -170,10 +198,20 @@ function CreateBookingForm({ onCloseModal }) {
 				/>
 			</FormRow>
 
-			<FormRow label="Total of guests">
+			<FormRow
+				label="Total of guests"
+				error={
+					errors.numGuests
+						? 'The total of guests field is required to add a booking'
+						: ''
+				}
+			>
 				<Controller
 					name="numGuests"
 					control={control}
+					rules={{
+						required: true,
+					}}
 					render={({ field: { value } }) => (
 						<Select
 							options={options}
@@ -181,6 +219,7 @@ function CreateBookingForm({ onCloseModal }) {
 							type="white"
 							onChange={(evt) => {
 								handleChangeGuests(evt);
+								clearErrors('numGuests');
 							}}
 							disabled={
 								isCreating || watchAllFields.cabinId === ''
@@ -190,10 +229,20 @@ function CreateBookingForm({ onCloseModal }) {
 				/>
 			</FormRow>
 
-			<DatePickerRow label="Pick the start date">
+			<DatePickerRow
+				label="Pick the start date"
+				error={
+					errors.startDate
+						? 'The start date field is required to add a booking'
+						: ''
+				}
+			>
 				<Controller
 					control={control}
 					name="startDate"
+					rules={{
+						required: true,
+					}}
 					render={({ field: { onChange, value } }) => (
 						<DatePicker
 							showIcon
@@ -207,10 +256,20 @@ function CreateBookingForm({ onCloseModal }) {
 				/>
 			</DatePickerRow>
 
-			<DatePickerRow label="Pick the end date">
+			<DatePickerRow
+				label="Pick the end date"
+				error={
+					errors.endDate
+						? 'The end date field is required to add a booking'
+						: ''
+				}
+			>
 				<Controller
 					control={control}
 					name="endDate"
+					rules={{
+						required: true,
+					}}
 					render={({ field: { onChange, value } }) => (
 						<DatePicker
 							showIcon
