@@ -19,6 +19,7 @@ import Spinner from '../../ui/Spinner';
 import Select from '../../ui/Select';
 import DatePickerRow from '../../ui/DatePickerRow';
 import Checkbox from '../../ui/Checkbox';
+import Textarea from '../../ui/Textarea';
 
 function CreateBookingForm({ onCloseModal }) {
 	const { guests, isLoading: isLoadingGuests } = useGuests();
@@ -38,6 +39,8 @@ function CreateBookingForm({ onCloseModal }) {
 				numGuests: '',
 				startDate: null,
 				endDate: null,
+				hasBreakfast: false,
+				observations: '',
 			},
 		});
 
@@ -126,7 +129,6 @@ function CreateBookingForm({ onCloseModal }) {
 			extrasPrice,
 			status: 'unconfirmed',
 			isPaid: false,
-			observations: '',
 		};
 
 		createBooking(newBooking);
@@ -250,6 +252,22 @@ function CreateBookingForm({ onCloseModal }) {
 									: ''}
 							</p>
 						</Checkbox>
+					)}
+				/>
+			</FormRow>
+
+			<FormRow label="Observations">
+				<Controller
+					name="observations"
+					control={control}
+					render={({ field: { onChange, value } }) => (
+						<Textarea
+							type="text"
+							id="observations"
+							disabled={isCreating}
+							onChange={onChange}
+							value={value}
+						/>
 					)}
 				/>
 			</FormRow>
