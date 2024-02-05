@@ -56,7 +56,7 @@ function CreateBookingForm({ onCloseModal }) {
 	const options = useMemo(() => {
 		let numGuests = [];
 
-		const selectedCabin = cabins.find(
+		const selectedCabin = cabins?.find(
 			(cabin) => String(cabin.id) === watchAllFields.cabinId,
 		);
 
