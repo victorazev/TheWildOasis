@@ -142,7 +142,10 @@ function CreateBookingForm({ onCloseModal }) {
 	}
 
 	return (
-		<Form onSubmit={handleSubmit(onSubmit)}>
+		<Form
+			onSubmit={handleSubmit(onSubmit)}
+			type={onCloseModal ? 'modal' : 'regular'}
+		>
 			<FormRow
 				label="Guest"
 				error={
