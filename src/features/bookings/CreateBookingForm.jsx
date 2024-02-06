@@ -4,6 +4,7 @@ import { useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import styled from 'styled-components';
 import { differenceInDays } from 'date-fns';
 
 import { useGuests } from '../guests/useGuests';
@@ -30,6 +31,19 @@ function CreateBookingForm({ onCloseModal }) {
 		useSettings();
 
 	const { createBooking, isCreating } = useCreateBooking();
+
+	const StyledDatepicker = styled.div`
+		input {
+			font-size: 1.4rem;
+			padding: 0.85rem 2.7rem;
+			border: 1px solid var(--color-grey-100);
+			border-radius: var(--border-radius-sm);
+			background-color: var(--color-grey-0);
+			font-weight: 500;
+			box-shadow: var(--shadow-sm);
+			background-color: transparent;
+		}
+	`;
 
 	const {
 		handleSubmit,
@@ -167,7 +181,7 @@ function CreateBookingForm({ onCloseModal }) {
 							type="white"
 							onChange={onChange}
 							disabled={isCreating}
-						></Select>
+						/>
 					)}
 				/>
 			</FormRow>
@@ -247,14 +261,16 @@ function CreateBookingForm({ onCloseModal }) {
 						required: true,
 					}}
 					render={({ field: { onChange, value } }) => (
-						<DatePicker
-							showIcon
-							onChange={onChange}
-							minDate={new Date()}
-							selected={value}
-							dateFormat="dd/MM/yyyy"
-							disabled={isCreating}
-						/>
+						<StyledDatepicker>
+							<DatePicker
+								showIcon
+								onChange={onChange}
+								minDate={new Date()}
+								selected={value}
+								dateFormat="dd/MM/yyyy"
+								disabled={isCreating}
+							/>
+						</StyledDatepicker>
 					)}
 				/>
 			</DatePickerRow>
@@ -274,14 +290,16 @@ function CreateBookingForm({ onCloseModal }) {
 						required: true,
 					}}
 					render={({ field: { onChange, value } }) => (
-						<DatePicker
-							showIcon
-							onChange={onChange}
-							minDate={new Date()}
-							selected={value}
-							dateFormat="dd/MM/yyyy"
-							disabled={isCreating}
-						/>
+						<StyledDatepicker>
+							<DatePicker
+								showIcon
+								onChange={onChange}
+								minDate={new Date()}
+								selected={value}
+								dateFormat="dd/MM/yyyy"
+								disabled={isCreating}
+							/>
+						</StyledDatepicker>
 					)}
 				/>
 			</DatePickerRow>
