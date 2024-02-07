@@ -6,6 +6,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
 import { differenceInDays } from 'date-fns';
+import { HiCalendarDays } from 'react-icons/hi2';
 
 import { useGuests } from '../guests/useGuests';
 import { useCabins } from '../cabins/useCabins';
@@ -35,7 +36,7 @@ function CreateBookingForm({ onCloseModal }) {
 	const StyledDatepicker = styled.div`
 		input {
 			font-size: 1.4rem;
-			padding: 0.85rem 2.7rem;
+			padding: 0.85rem 1.7rem 0.85rem 3.8rem;
 			border: 1px solid var(--color-grey-100);
 			border-radius: var(--border-radius-sm);
 			background-color: var(--color-grey-0);
@@ -269,6 +270,7 @@ function CreateBookingForm({ onCloseModal }) {
 								selected={value}
 								dateFormat="dd/MM/yyyy"
 								disabled={isCreating}
+								icon={<HiCalendarDays font-size="3rem" />}
 							/>
 						</StyledDatepicker>
 					)}
@@ -298,6 +300,7 @@ function CreateBookingForm({ onCloseModal }) {
 								selected={value}
 								dateFormat="dd/MM/yyyy"
 								disabled={isCreating}
+								icon={<HiCalendarDays font-size="3rem" />}
 							/>
 						</StyledDatepicker>
 					)}
