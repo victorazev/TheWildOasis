@@ -42,7 +42,66 @@ function CreateBookingForm({ onCloseModal }) {
 			background-color: var(--color-grey-0);
 			font-weight: 500;
 			box-shadow: var(--shadow-sm);
-			background-color: transparent;
+		}
+
+		.react-datepicker {
+			font-size: 1em;
+			border: 1px solid var(--color-grey-100);
+			border-radius: var(--border-radius-sm);
+			background-color: var(--color-grey-100);
+			font-weight: 500;
+			box-shadow: var(--shadow-sm);
+		}
+		.react-datepicker__header {
+			padding-top: 0.8em;
+			background-color: var(--color-grey-200);
+		}
+		.react-datepicker__month {
+			margin: 0.4em 1em;
+		}
+
+		.react-datepicker__day-name,
+		.react-datepicker__day {
+			color: var(--color-grey-600);
+			width: 1.9em;
+			line-height: 1.9em;
+			margin: 0.166em;
+			&:hover {
+				background-color: var(--color-grey-200);
+			}
+		}
+		.react-datepicker__day--today {
+			font-weight: normal;
+		}
+		.react-datepicker__day--selected {
+			background-color: var(--color-grey-50);
+			font-weight: bold;
+		}
+		.react-datepicker__day--disabled {
+			color: var(--color-grey-300);
+		}
+		.react-datepicker__day--keyboard-selected {
+			background-color: var(--color-grey-100);
+		}
+
+		.react-datepicker__current-month {
+			color: var(--color-grey-700);
+			font-size: 1em;
+			gap: 1em;
+		}
+
+		.react-datepicker__navigation {
+			line-height: 1.7em;
+			border: 0.45em solid transparent;
+			&:focus {
+				outline: none;
+			}
+		}
+		.react-datepicker__navigation--previous {
+			left: 1em;
+		}
+		.react-datepicker__navigation--next {
+			right: 1em;
 		}
 	`;
 
