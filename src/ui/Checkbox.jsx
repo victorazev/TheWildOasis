@@ -6,11 +6,19 @@ const StyledCheckbox = styled.div`
 	gap: 1.6rem;
 
 	& input[type='checkbox'] {
+		cursor: pointer;
 		height: 2.4rem;
 		width: 2.4rem;
 		outline-offset: 2px;
 		transform-origin: 0;
+		transition: 200ms;
 		accent-color: var(--color-brand-600);
+	}
+
+	& input[type='checkbox']:not(:checked):not(:disabled) {
+		appearance: none;
+		background: var(--color-grey-50);
+		border-radius: 5px;
 	}
 
 	& input[type='checkbox']:disabled {
