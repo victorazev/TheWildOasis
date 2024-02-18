@@ -26,6 +26,7 @@ import Booking from './pages/Booking';
 import Checkin from './pages/Checkin';
 import ProtectedRoute from './ui/ProtectedRoute';
 import Guests from './pages/Guests';
+import Guest from './pages/Guest';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -57,6 +58,10 @@ function App() {
 							/>
 							<Route path="account" element={<Account />} />
 							<Route path="guests" element={<Guests />} />
+							<Route
+								path="guests/:guestId"
+								element={<Guest />}
+							/>
 							<Route path="bookings" element={<Bookings />} />
 							<Route
 								path="bookings/:bookingId"

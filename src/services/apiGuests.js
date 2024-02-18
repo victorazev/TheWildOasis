@@ -12,3 +12,18 @@ export async function getGuests() {
 
 	return data;
 }
+
+export async function getGuest(id) {
+	const { data, error } = await supabase
+		.from('guests')
+		.select('*')
+		.eq('id', id)
+		.single();
+
+	if (error) {
+		console.error(error);
+		throw new Error('Guest not found');
+	}
+
+	return data;
+}
