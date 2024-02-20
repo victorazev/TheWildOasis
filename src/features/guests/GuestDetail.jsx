@@ -10,6 +10,7 @@ import Row from '../../ui/Row';
 import Spinner from '../../ui/Spinner';
 import Heading from '../../ui/Heading';
 import ButtonText from '../../ui/ButtonText';
+import { useGetGuestBooking } from './useGetGuestBooking';
 
 const StyledGuestDataBox = styled.section`
 	background-color: var(--color-grey-0);
@@ -19,12 +20,19 @@ const StyledGuestDataBox = styled.section`
 	overflow: hidden;
 `;
 
-const Section = styled.section`
+const Header = styled.header`
 	background-color: var(--color-brand-500);
 	font-size: 1.8rem;
 	font-weight: 500;
 	padding: 3.2rem 4rem 1.2rem;
 	color: var(--color-grey-500);
+`;
+
+const Section = styled.section`
+	padding: 2rem 4rem;
+	color: #e0e7ff;
+	font-size: 1.7rem;
+	font-weight: 400;
 `;
 
 const Guest = styled.div`
@@ -43,12 +51,13 @@ const Footer = styled.footer`
 `;
 
 function GuestDetail() {
-	const { guest, isLoading } = useGetGuest();
-	console.log(guest);
+	const { guest, isLoading: isLoadingGuest } = useGetGuest();
+	const { booking, isLoading: isLoadingBooking } =
+		useGetGuestBooking();
 
 	const moveBack = useMoveBack();
 
-	if (isLoading) return <Spinner />;
+	if (isLoadingGuest || isLoadingBooking) return <Spinner />;
 	if (!guest) return <Empty resourceName="guest" />;
 
 	const {
@@ -69,7 +78,7 @@ function GuestDetail() {
 			</Row>
 
 			<StyledGuestDataBox>
-				<Section>
+				<Header>
 					<Guest>
 						{countryFlag && (
 							<Flag
@@ -83,11 +92,32 @@ function GuestDetail() {
 						<span>&bull;</span>
 						<p>National ID {nationalID}</p>
 					</Guest>
+				</Header>
+
+				<Section>
+					{booking != undefined ? (
+						<>
+							This user has a booking of {booking.numNights}{' '}
+							nights with {booking.numGuests} guests in Cabin{' '}
+							{booking.cabins.name}
+							<p>
+								From{' '}
+								{format(
+									new Date(booking.startDate),
+									'MMMM dd p',
+								)}
+								, to{' '}
+								{format(new Date(booking.endDate), 'MMMM dd p')}
+							</p>
+						</>
+					) : (
+						'This user has no booking yet'
+					)}
 				</Section>
 
 				<Footer>
 					<p>
-						Created{' '}
+						User created on{' '}
 						{format(new Date(createdAt), 'EEE, MMM dd yyyy, p')}
 					</p>
 				</Footer>

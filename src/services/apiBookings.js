@@ -151,3 +151,17 @@ export async function createBooking(newBooking) {
 	}
 	return data;
 }
+
+export async function getBookingByGuestId(id) {
+	const { data, error } = await supabase
+		.from('bookings')
+		.select('*, cabins(name)')
+		.eq('guestId', id)
+		.single();
+
+	if (error) {
+		console.error(error);
+		throw new Error('Booking could not be found');
+	}
+	return data;
+}
