@@ -1,8 +1,15 @@
 import styled from 'styled-components';
 import { format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
+import {
+	HiHome,
+	HiMiniUserGroup,
+	HiMoon,
+} from 'react-icons/hi2';
 
 import { useGetGuest } from './useGetGuest';
 import { useMoveBack } from '../../hooks/useMoveBack';
+import { useGetGuestBooking } from './useGetGuestBooking';
 
 import { Flag } from '../../ui/Flag';
 import Empty from '../../ui/Empty';
@@ -10,13 +17,12 @@ import Row from '../../ui/Row';
 import Spinner from '../../ui/Spinner';
 import Heading from '../../ui/Heading';
 import ButtonText from '../../ui/ButtonText';
-import { useGetGuestBooking } from './useGetGuestBooking';
+import Button from '../../ui/Button';
 
 const StyledGuestDataBox = styled.section`
 	background-color: var(--color-grey-0);
 	border: 1px solid var(--color-grey-100);
 	border-radius: var(--border-radius-md);
-
 	overflow: hidden;
 `;
 
@@ -29,10 +35,25 @@ const Header = styled.header`
 `;
 
 const Section = styled.section`
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	gap: 1.2rem;
 	padding: 2rem 4rem;
 	color: #e0e7ff;
 	font-size: 1.7rem;
 	font-weight: 400;
+
+	p {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	svg {
+		height: 3.2rem;
+		width: 3.2rem;
+	}
 `;
 
 const Guest = styled.div`
@@ -56,6 +77,7 @@ function GuestDetail() {
 		useGetGuestBooking();
 
 	const moveBack = useMoveBack();
+	const navigate = useNavigate();
 
 	if (isLoadingGuest || isLoadingBooking) return <Spinner />;
 	if (!guest) return <Empty resourceName="guest" />;
@@ -94,26 +116,66 @@ function GuestDetail() {
 					</Guest>
 				</Header>
 
-				<Section>
-					{booking != undefined ? (
-						<>
-							This user has a booking of {booking.numNights}{' '}
-							nights with {booking.numGuests} guests in Cabin{' '}
-							{booking.cabins.name}
-							<p>
-								From{' '}
-								{format(
-									new Date(booking.startDate),
-									'MMMM dd p',
-								)}
-								, to{' '}
-								{format(new Date(booking.endDate), 'MMMM dd p')}
-							</p>
-						</>
-					) : (
-						'This user has no booking yet'
-					)}
-				</Section>
+				{booking.length > 0 ? (
+					booking.map((booking) => (
+						<Section key={booking.id}>
+							{
+								<>
+									<div>
+										<HiMoon />
+										<p>{booking.numNights}</p>
+									</div>
+
+									<div>
+										<HiMiniUserGroup />
+										<p>{booking.numGuests}</p>
+									</div>
+
+									<div>
+										<HiHome />
+										<p>{booking.cabins.name}</p>
+									</div>
+
+									<div>
+										<p>
+											{format(
+												new Date(booking.startDate),
+												'MMMM dd',
+											)}
+										</p>
+										<p>
+											{format(new Date(booking.startDate), 'p')}
+										</p>
+									</div>
+
+									<div>
+										<p>
+											{format(
+												new Date(booking.endDate),
+												'MMMM dd',
+											)}
+										</p>
+										<p>
+											{format(new Date(booking.endDate), 'p')}
+										</p>
+									</div>
+
+									<div>
+										<Button
+											onClick={() =>
+												navigate(`/bookings/${booking.id}`)
+											}
+										>
+											Check booking
+										</Button>
+									</div>
+								</>
+							}
+						</Section>
+					))
+				) : (
+					<Section>This user has no booking yet</Section>
+				)}
 
 				<Footer>
 					<p>

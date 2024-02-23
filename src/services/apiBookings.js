@@ -156,8 +156,7 @@ export async function getBookingByGuestId(id) {
 	const { data, error } = await supabase
 		.from('bookings')
 		.select('*, cabins(name)')
-		.eq('guestId', id)
-		.single();
+		.eq('guestId', id);
 
 	if (error) {
 		console.error(error);
