@@ -37,9 +37,9 @@ const Header = styled.header`
 const Section = styled.section`
 	display: flex;
 	align-items: center;
-	justify-content: space-around;
+	justify-content: space-between;
 	gap: 1.2rem;
-	padding: 2rem 4rem;
+	padding: 2rem 4rem 1rem 4rem;
 	color: #e0e7ff;
 	font-size: 1.7rem;
 	font-weight: 400;
@@ -54,6 +54,11 @@ const Section = styled.section`
 		height: 3.2rem;
 		width: 3.2rem;
 	}
+
+	&:not(:last-of-type) {
+		border-bottom: 1px solid var(--color-grey-200);
+		padding: 2rem 4rem;
+	}
 `;
 
 const Guest = styled.div`
@@ -65,7 +70,7 @@ const Guest = styled.div`
 `;
 
 const Footer = styled.footer`
-	padding: 1.6rem 4rem;
+	padding: 1rem 4rem;
 	font-size: 1.2rem;
 	color: var(--color-grey-500);
 	text-align: right;
@@ -122,25 +127,31 @@ function GuestDetail() {
 							{
 								<>
 									<div>
-										<HiMoon />
-										<p>{booking.numNights}</p>
+										<HiHome />
+										<p title={`Cabin's name`}>
+											{booking.cabins.name}
+										</p>
 									</div>
 
 									<div>
 										<HiMiniUserGroup />
-										<p>{booking.numGuests}</p>
+										<p title="Number of guests">
+											{booking.numGuests}
+										</p>
 									</div>
 
 									<div>
-										<HiHome />
-										<p>{booking.cabins.name}</p>
+										<HiMoon />
+										<p title="Number of nights">
+											{booking.numNights}
+										</p>
 									</div>
 
-									<div>
+									<div title="Start booking date">
 										<p>
 											{format(
 												new Date(booking.startDate),
-												'MMMM dd',
+												'dd/MM/yyyy',
 											)}
 										</p>
 										<p>
@@ -148,11 +159,11 @@ function GuestDetail() {
 										</p>
 									</div>
 
-									<div>
+									<div title="End booking date">
 										<p>
 											{format(
 												new Date(booking.endDate),
-												'MMMM dd',
+												'dd/MM/yyyy',
 											)}
 										</p>
 										<p>
