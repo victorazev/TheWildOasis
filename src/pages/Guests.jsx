@@ -1,7 +1,7 @@
-import Button from '../ui/Button';
 import Heading from '../ui/Heading';
 import Row from '../ui/Row';
 import GuestsTable from '../features/guests/guestsTable';
+import AddGuest from '../features/guests/AddGuest';
 
 function Guests() {
 	return (
@@ -11,8 +11,7 @@ function Guests() {
 			</Row>
 
 			<GuestsTable />
-
-			<Button>Add new guest</Button>
+			<AddGuest />
 		</>
 	);
 }
