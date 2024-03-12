@@ -1,6 +1,6 @@
 import supabase from './supabase';
 
-import { GUESTS_SIZE } from '../utils/constants';
+import { GUESTS_PAGE_SIZE } from '../utils/constants';
 
 export async function getGuests({ sortBy, page }) {
 	let query = supabase
@@ -14,8 +14,8 @@ export async function getGuests({ sortBy, page }) {
 	}
 
 	if (page) {
-		const from = (page - 1) * GUESTS_SIZE;
-		const to = from + GUESTS_SIZE - 1;
+		const from = (page - 1) * GUESTS_PAGE_SIZE;
+		const to = from + GUESTS_PAGE_SIZE - 1;
 
 		query = query.range(from, to);
 	}

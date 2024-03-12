@@ -5,7 +5,7 @@ import {
 import { useSearchParams } from 'react-router-dom';
 
 import { getGuests } from '../../services/apiGuests';
-import { GUESTS_SIZE } from '../../utils/constants';
+import { GUESTS_PAGE_SIZE } from '../../utils/constants';
 
 export function useGuests() {
 	const queryClient = useQueryClient();
@@ -29,7 +29,7 @@ export function useGuests() {
 		queryFn: () => getGuests({ sortBy, page }),
 	});
 
-	const pageCount = Math.ceil(count / GUESTS_SIZE);
+	const pageCount = Math.ceil(count / GUESTS_PAGE_SIZE);
 
 	if (page < pageCount) {
 		queryClient.prefetchQuery({

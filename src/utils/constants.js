@@ -1,3 +1,3 @@
 // Change this file to env in the future.
-export const PAGE_SIZE = 6;
-export const GUESTS_SIZE = 8;
+export const DEFAULT_PAGE_SIZE = 6;
+export const GUESTS_PAGE_SIZE = 8;

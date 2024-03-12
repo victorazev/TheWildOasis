@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { PAGE_SIZE } from '../utils/constants';
+import { DEFAULT_PAGE_SIZE } from '../utils/constants';
 import { getToday } from '../utils/helpers';
 import supabase from './supabase';
 
@@ -25,8 +25,8 @@ export async function getBookings({ filter, sortBy, page }) {
 	}
 
 	if (page) {
-		const from = (page - 1) * PAGE_SIZE;
-		const to = from + PAGE_SIZE - 1;
+		const from = (page - 1) * DEFAULT_PAGE_SIZE;
+		const to = from + DEFAULT_PAGE_SIZE - 1;
 
 		query = query.range(from, to);
 	}

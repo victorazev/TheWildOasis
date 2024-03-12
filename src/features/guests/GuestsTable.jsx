@@ -1,6 +1,6 @@
 import { useGuests } from './useGuests';
 
-import { GUESTS_SIZE } from '../../utils/constants';
+import { GUESTS_PAGE_SIZE } from '../../utils/constants';
 
 import Menus from '../../ui/Menus';
 import Table from '../../ui/Table';
@@ -35,7 +35,7 @@ function GuestsTable() {
 			</Table>
 
 			<Table.Footer>
-				<Pagination count={count} type={GUESTS_SIZE} />
+				<Pagination count={count} type={GUESTS_PAGE_SIZE} />
 			</Table.Footer>
 		</Menus>
 	);

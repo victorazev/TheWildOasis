@@ -1,4 +1,6 @@
 import { useBookings } from './useBookings';
+import { DEFAULT_PAGE_SIZE } from '../../utils/constants';
+
 import BookingRow from './BookingRow';
 import Table from '../../ui/Table';
 import Menus from '../../ui/Menus';
@@ -35,7 +37,7 @@ function BookingTable() {
 			</Table>
 
 			<Table.Footer>
-				<Pagination count={count} />
+				<Pagination count={count} type={DEFAULT_PAGE_SIZE} />
 			</Table.Footer>
 		</Menus>
 	);
