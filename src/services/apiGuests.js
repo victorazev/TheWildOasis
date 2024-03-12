@@ -1,16 +1,33 @@
 import supabase from './supabase';
 
-export async function getGuests() {
-	const { data, error } = await supabase
+import { GUESTS_SIZE } from '../utils/constants';
+
+export async function getGuests({ sortBy, page }) {
+	let query = supabase
 		.from('guests')
-		.select('*');
+		.select('*', { count: 'exact' });
+
+	if (sortBy) {
+		query = query.order(sortBy.field, {
+			ascending: sortBy.direction === 'asc',
+		});
+	}
+
+	if (page) {
+		const from = (page - 1) * GUESTS_SIZE;
+		const to = from + GUESTS_SIZE - 1;
+
+		query = query.range(from, to);
+	}
+
+	const { data, error, count } = await query;
 
 	if (error) {
 		console.log(error);
 		throw new Error('Guests could not be loaded');
 	}
 
-	return data;
+	return { data, count };
 }
 
 export async function getGuest(id) {

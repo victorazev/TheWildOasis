@@ -1,14 +1,20 @@
 import { useGuests } from './useGuests';
 
+import { GUESTS_SIZE } from '../../utils/constants';
+
 import Menus from '../../ui/Menus';
 import Table from '../../ui/Table';
 import Spinner from '../../ui/Spinner';
 import GuestsRow from './GuestsRow';
+import Empty from '../../ui/Empty';
+import Pagination from '../../ui/Pagination';
 
 function GuestsTable() {
-	const { guests, isLoading } = useGuests();
+	const { guests, isLoading, count } = useGuests();
 
 	if (isLoading) return <Spinner />;
+
+	if (!guests.length) return <Empty resourceName="guests" />;
 
 	return (
 		<Menus>
@@ -28,9 +34,9 @@ function GuestsTable() {
 				/>
 			</Table>
 
-			{/* <Table.Footer>
-				<Pagination count={count} />
-			</Table.Footer> */}
+			<Table.Footer>
+				<Pagination count={count} type={GUESTS_SIZE} />
+			</Table.Footer>
 		</Menus>
 	);
 }
