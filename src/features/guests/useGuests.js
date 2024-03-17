@@ -12,10 +12,10 @@ export function useGuests() {
 	const [searchParams] = useSearchParams();
 
 	const filterValue = searchParams.get('activity');
-	const filter =
-		!filterValue || filterValue === 'all'
-			? { field: 'activity', value: 'all' }
-			: { field: 'activity', value: filterValue };
+	const filter = {
+		field: 'activity',
+		value: filterValue ? filterValue : 'all',
+	};
 
 	const sortByRaw =
 		searchParams.get('sortBy') || 'fullName-asc';
