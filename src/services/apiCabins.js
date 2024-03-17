@@ -1,6 +1,43 @@
+import { DEFAULT_PAGE_SIZE } from '../utils/constants';
 import supabase, { supabaseUrl } from './supabase';
 
-export async function getCabins() {
+export async function getCabins({ filter, sortBy, page }) {
+	let query = supabase
+		.from('cabins')
+		.select('*', { count: 'exact' });
+
+	if (filter.value === 'no-discount') {
+		query = query.eq('discount', 0);
+	}
+
+	if (filter.value === 'with-discount') {
+		query = query.gt('discount', 0);
+	}
+
+	if (sortBy) {
+		query = query.order(sortBy.field, {
+			ascending: sortBy.direction === 'asc',
+		});
+	}
+
+	if (page) {
+		const from = (page - 1) * DEFAULT_PAGE_SIZE;
+		const to = from + DEFAULT_PAGE_SIZE - 1;
+
+		query = query.range(from, to);
+	}
+
+	const { data, error, count } = await query;
+
+	if (error) {
+		console.log(error);
+		throw new Error('Cabins could not be loaded');
+	}
+
+	return { data, count };
+}
+
+export async function getAllCabins() {
 	const { data, error } = await supabase
 		.from('cabins')
 		.select('*');

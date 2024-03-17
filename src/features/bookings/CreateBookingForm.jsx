@@ -9,7 +9,7 @@ import { differenceInDays } from 'date-fns';
 import { HiCalendarDays } from 'react-icons/hi2';
 
 import { useGuests } from '../guests/useGuests';
-import { useCabins } from '../cabins/useCabins';
+import { useAllCabins } from '../cabins/useAllCabins';
 import { useCreateBooking } from './useCreateBooking';
 import { useSettings } from '../settings/useSettings';
 import { formatCurrency } from '../../utils/helpers';
@@ -26,7 +26,7 @@ import Textarea from '../../ui/Textarea';
 function CreateBookingForm({ onCloseModal }) {
 	const { guests, isLoading: isLoadingGuests } = useGuests();
 
-	const { cabins, isLoading: isLoadingCabins } = useCabins();
+	const { cabins, isLoading: isLoadingCabins } = useAllCabins();
 
 	const { settings, isLoading: isLoadingSettings } =
 		useSettings();

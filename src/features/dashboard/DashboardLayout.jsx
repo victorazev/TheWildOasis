@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { useRecentBookings } from './useRecentBookings';
 import { useRecentStays } from './useRecentStays';
-import { useCabins } from '../cabins/useCabins';
+import { useAllCabins } from '../cabins/useAllCabins';
 
 import Spinner from '../../ui/Spinner';
 import Stats from './Stats';
@@ -25,7 +25,7 @@ function DashboardLayout() {
 		isLoading: isLoadingStays,
 		numDays,
 	} = useRecentStays();
-	const { cabins, isLoading: isLoadingCabins } = useCabins();
+	const { cabins, isLoading: isLoadingCabins } = useAllCabins();
 
 	if (isLoadingBookings || isLoadingStays || isLoadingCabins)
 		return <Spinner />;
