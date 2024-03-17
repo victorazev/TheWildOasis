@@ -1,11 +1,34 @@
 import supabase from './supabase';
-
 import { GUESTS_PAGE_SIZE } from '../utils/constants';
 
-export async function getGuests({ sortBy, page }) {
-	let query = supabase
-		.from('guests')
-		.select('*', { count: 'exact' });
+export async function getGuests({ filter, sortBy, page }) {
+	let query = supabase.from('guests');
+
+	if (filter.value === 'all') {
+		query = query.select('*', { count: 'exact' });
+	}
+
+	if (filter.value === 'active') {
+		query = query.select(
+			`
+		*,
+		bookings!inner(guestId)
+	`,
+			{ count: 'exact' },
+		);
+	}
+
+	if (filter.value === 'inactive') {
+		query = query
+			.select(
+				`
+				*,
+				bookings(guestId)
+			`,
+				{ count: 'exact' },
+			)
+			.is('bookings(guestId)', null);
+	}
 
 	if (sortBy) {
 		query = query.order(sortBy.field, {

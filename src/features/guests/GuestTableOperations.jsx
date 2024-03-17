@@ -1,18 +1,18 @@
+import Filter from '../../ui/Filter';
 import SortBy from '../../ui/SortBy';
 import TableOperations from '../../ui/TableOperations';
 
 function GuestTableOperations() {
 	return (
 		<TableOperations>
-			{/* Filters to apply in future:
-        <Filter
-				filterField="status"
+			<Filter
+				filterField="activity"
 				options={[
 					{ value: 'all', label: 'All' },
 					{ value: 'active', label: 'Active user' },
 					{ value: 'inactive', label: 'Inactive user' },
 				]}
-			/> */}
+			/>
 
 			<SortBy
 				options={[

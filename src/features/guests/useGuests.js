@@ -11,6 +11,12 @@ export function useGuests() {
 	const queryClient = useQueryClient();
 	const [searchParams] = useSearchParams();
 
+	const filterValue = searchParams.get('activity');
+	const filter =
+		!filterValue || filterValue === 'all'
+			? { field: 'activity', value: 'all' }
+			: { field: 'activity', value: filterValue };
+
 	const sortByRaw =
 		searchParams.get('sortBy') || 'fullName-asc';
 	const [field, direction] = sortByRaw.split('-');
@@ -25,23 +31,25 @@ export function useGuests() {
 		data: { data: guests, count } = {},
 		error,
 	} = useQuery({
-		queryKey: ['guests', sortBy, page],
-		queryFn: () => getGuests({ sortBy, page }),
+		queryKey: ['guests', filter, sortBy, page],
+		queryFn: () => getGuests({ filter, sortBy, page }),
 	});
 
 	const pageCount = Math.ceil(count / GUESTS_PAGE_SIZE);
 
 	if (page < pageCount) {
 		queryClient.prefetchQuery({
-			queryKey: ['guests', sortBy, page + 1],
-			queryFn: () => getGuests({ sortBy, page: page + 1 }),
+			queryKey: ['guests', filter, sortBy, page + 1],
+			queryFn: () =>
+				getGuests({ filter, sortBy, page: page + 1 }),
 		});
 	}
 
 	if (page > 1) {
 		queryClient.prefetchQuery({
-			queryKey: ['guests', sortBy, page - 1],
-			queryFn: () => getGuests({ sortBy, page: page - 1 }),
+			queryKey: ['guests', filter, sortBy, page - 1],
+			queryFn: () =>
+				getGuests({ filter, sortBy, page: page - 1 }),
 		});
 	}
 
