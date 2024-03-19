@@ -113,6 +113,7 @@ function CreateBookingForm({ onCloseModal }) {
 		watch,
 		formState: { errors },
 		clearErrors,
+		reset,
 	} = useForm({
 		defaultValues: {
 			guestId: '',
@@ -220,7 +221,15 @@ function CreateBookingForm({ onCloseModal }) {
 			endDate,
 		};
 
-		createBooking(newBooking);
+		createBooking(
+			{ ...newBooking },
+			{
+				onSuccess: () => {
+					reset();
+					onCloseModal?.();
+				},
+			},
+		);
 	}
 
 	return (
