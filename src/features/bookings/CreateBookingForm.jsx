@@ -202,6 +202,12 @@ function CreateBookingForm({ onCloseModal }) {
 
 		const totalPrice = cabinPrice + extrasPrice;
 
+		const startDate =
+			data.startDate.toString().slice(0, 16) + '12:00:00';
+
+		const endDate =
+			data.endDate.toString().slice(0, 16) + '11:59:00';
+
 		const newBooking = {
 			...data,
 			totalPrice,
@@ -210,6 +216,8 @@ function CreateBookingForm({ onCloseModal }) {
 			extrasPrice,
 			status: 'unconfirmed',
 			isPaid: false,
+			startDate,
+			endDate,
 		};
 
 		createBooking(newBooking);
