@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { differenceInDays } from 'date-fns';
 import { HiCalendarDays } from 'react-icons/hi2';
 
-import { useGuests } from '../guests/useGuests';
+import { useAllGuests } from '../guests/useAllGuests';
 import { useAllCabins } from '../cabins/useAllCabins';
 import { useCreateBooking } from './useCreateBooking';
 import { useSettings } from '../settings/useSettings';
@@ -96,7 +96,7 @@ const StyledDatepicker = styled.div`
 `;
 
 function CreateBookingForm({ onCloseModal }) {
-	const { guests, isLoading: isLoadingGuests } = useGuests();
+	const { guests, isLoading: isLoadingGuests } = useAllGuests();
 
 	const { cabins, isLoading: isLoadingCabins } = useAllCabins();
 
