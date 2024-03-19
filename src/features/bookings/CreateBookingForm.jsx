@@ -346,7 +346,7 @@ function CreateBookingForm({ onCloseModal }) {
 								selected={value}
 								dateFormat="dd/MM/yyyy"
 								disabled={isCreating}
-								icon={<HiCalendarDays font-size="3rem" />}
+								icon={<HiCalendarDays fontSize="3rem" />}
 							/>
 						</StyledDatepicker>
 					)}
@@ -376,7 +376,7 @@ function CreateBookingForm({ onCloseModal }) {
 								selected={value}
 								dateFormat="dd/MM/yyyy"
 								disabled={isCreating}
-								icon={<HiCalendarDays font-size="3rem" />}
+								icon={<HiCalendarDays fontSize="3rem" />}
 							/>
 						</StyledDatepicker>
 					)}
