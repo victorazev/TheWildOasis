@@ -27,7 +27,7 @@ const StyledDatepicker = styled.div`
 	input {
 		font-size: 1.4rem;
 		padding: 0.85rem 1.7rem 0.85rem 3.8rem;
-		border: 1px solid var(--color-grey-100);
+		border: 1px solid var(--color-grey-300);
 		border-radius: var(--border-radius-sm);
 		background-color: var(--color-grey-0);
 		font-weight: 500;
@@ -255,7 +255,6 @@ function CreateBookingForm({ onCloseModal }) {
 						<Select
 							options={guestOptions}
 							value={value}
-							type="white"
 							onChange={onChange}
 							disabled={isCreating}
 						/>
@@ -281,7 +280,6 @@ function CreateBookingForm({ onCloseModal }) {
 						<Select
 							options={cabinOptions}
 							value={value}
-							type="white"
 							onChange={(evt) => {
 								handleChangeCabin(evt);
 								clearErrors('cabinId');
@@ -310,7 +308,6 @@ function CreateBookingForm({ onCloseModal }) {
 						<Select
 							options={options}
 							value={value}
-							type="white"
 							onChange={(evt) => {
 								handleChangeGuests(evt);
 								clearErrors('numGuests');
