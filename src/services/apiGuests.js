@@ -53,6 +53,19 @@ export async function getGuests({ filter, sortBy, page }) {
 	return { data, count };
 }
 
+export async function getAllGuests() {
+	const { data, error } = await supabase
+		.from('guests')
+		.select('*');
+
+	if (error) {
+		console.error(error);
+		throw new Error('All guests could not be loaded');
+	}
+
+	return data;
+}
+
 export async function getGuest(id) {
 	const { data, error } = await supabase
 		.from('guests')
