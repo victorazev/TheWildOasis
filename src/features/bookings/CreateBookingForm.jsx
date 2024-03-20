@@ -97,7 +97,6 @@ const StyledDatepicker = styled.div`
 
 function CreateBookingForm({ onCloseModal }) {
 	const { guests, isLoading: isLoadingGuests } = useAllGuests();
-
 	const { cabins, isLoading: isLoadingCabins } = useAllCabins();
 
 	const { settings, isLoading: isLoadingSettings } =
@@ -126,13 +125,34 @@ function CreateBookingForm({ onCloseModal }) {
 		},
 	});
 
+	useEffect(() => {
+		if (
+			isLoadingGuests ||
+			isLoadingCabins ||
+			!guests ||
+			!cabins
+		) {
+			return;
+		}
+
+		setValue('guestId', String(guests[0].id));
+		setValue('cabinId', String(cabins[0].id));
+	}, [
+		guests,
+		cabins,
+		isLoadingGuests,
+		isLoadingCabins,
+		setValue,
+	]);
+
 	const watchAllFields = watch();
 
-	const options = useMemo(() => {
+	const totalGuestOptions = useMemo(() => {
 		let numGuests = [];
 
 		const selectedCabin = cabins?.find(
-			(cabin) => String(cabin.id) === watchAllFields.cabinId,
+			(cabin) =>
+				String(cabin.id) === String(watchAllFields.cabinId),
 		);
 
 		if (!selectedCabin) return numGuests;
@@ -153,10 +173,10 @@ function CreateBookingForm({ onCloseModal }) {
 	}, [cabins, watchAllFields.cabinId]);
 
 	useEffect(() => {
-		if (options.length === 0) return;
+		if (totalGuestOptions.length === 0) return;
 
-		setValue('numGuests', options[0].value);
-	}, [options, setValue, watchAllFields.cabinId]);
+		setValue('numGuests', totalGuestOptions[0].value);
+	}, [totalGuestOptions, setValue, watchAllFields.cabinId]);
 
 	if (isLoadingGuests || isLoadingCabins || isLoadingSettings)
 		return <Spinner />;
@@ -306,15 +326,13 @@ function CreateBookingForm({ onCloseModal }) {
 					}}
 					render={({ field: { value } }) => (
 						<Select
-							options={options}
+							options={totalGuestOptions}
 							value={value}
 							onChange={(evt) => {
 								handleChangeGuests(evt);
 								clearErrors('numGuests');
 							}}
-							disabled={
-								isCreating || watchAllFields.cabinId === ''
-							}
+							disabled={isCreating}
 						/>
 					)}
 				/>
