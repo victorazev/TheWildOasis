@@ -10,6 +10,7 @@ import Form from '../../ui/Form';
 import Button from '../../ui/Button';
 import FormRow from '../../ui/FormRow';
 import Select from '../../ui/Select';
+import { useEffect } from 'react';
 
 const nationalityOptions = countryListAllIsoData.map(
 	(country) => ({
@@ -21,11 +22,16 @@ const nationalityOptions = countryListAllIsoData.map(
 function CreateGuestForm({ onCloseModal }) {
 	const { isCreatingGuest, createGuest } = UseCreateGuest();
 
-	const { handleSubmit, reset, formState, control } = useForm();
+	const { handleSubmit, reset, formState, control, setValue } =
+		useForm();
 
 	const { errors } = formState;
 
-	console.log(errors);
+	useEffect(() => {
+		if (nationalityOptions.length === 0) return;
+
+		setValue('nationality', nationalityOptions[0].value);
+	}, [setValue]);
 
 	function onSubmit(data) {
 		const selectedCountry = countryListAllIsoData.find(
