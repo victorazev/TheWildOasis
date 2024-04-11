@@ -1,5 +1,11 @@
 import { createGlobalStyle } from 'styled-components';
 
+// Default values for screens
+// xs for screen sizes up to 768px
+// sm for sizes up to 992px
+// md for sizes up to 1200
+// lg for everything bigger than that
+
 const GlobalStyles = createGlobalStyle` 
 :root {
   &.light-mode {
