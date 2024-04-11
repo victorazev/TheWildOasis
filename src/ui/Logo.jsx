@@ -6,8 +6,12 @@ const StyledLogo = styled.div`
 `;
 
 const Img = styled.img`
-	height: 9.6rem;
+	max-height: 9.6rem;
+	padding: 0.75rem 0rem 0rem 0rem;
 	width: auto;
+	@media (max-width: 991px) {
+		max-height: 4rem;
+	}
 `;
 
 function Logo() {

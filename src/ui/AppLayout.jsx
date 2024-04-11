@@ -1,13 +1,20 @@
+import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
+import styled from 'styled-components';
+
+import NavFull from './NavFull';
 import Sidebar from './Sidebar';
 import Header from './Header';
-import styled from 'styled-components';
 
 const StyledAppLayout = styled.div`
 	display: grid;
-	grid-template-columns: 26rem 1fr;
 	grid-template-rows: auto 1fr;
+	grid-template-columns: none;
 	height: 100vh;
+	@media (min-width: 992px) {
+		display: grid;
+		grid-template-columns: 26rem 1fr;
+	}
 `;
 
 const Main = styled.main`
@@ -25,10 +32,32 @@ const Container = styled.div`
 `;
 
 function AppLayout() {
+	const [isMobile, setIsMobile] = useState(
+		window.innerWidth < 992,
+	);
+
+	useEffect(() => {
+		const handleResize = () => {
+			setIsMobile(window.innerWidth < 992);
+		};
+
+		window.addEventListener('resize', handleResize);
+
+		return () => {
+			window.removeEventListener('resize', handleResize);
+		};
+	}, []);
+
 	return (
 		<StyledAppLayout>
-			<Header />
-			<Sidebar />
+			{isMobile ? (
+				<NavFull />
+			) : (
+				<>
+					<Sidebar />
+					<Header />
+				</>
+			)}
 			<Main>
 				<Container>
 					<Outlet />

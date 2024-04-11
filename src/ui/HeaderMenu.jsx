@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import styled from 'styled-components';
 import Logout from '../features/authentication/Logout';
 import ButtonIcon from './ButtonIcon';
@@ -10,11 +11,12 @@ const StyledHeaderMenu = styled.ul`
 	gap: 0.4rem;
 `;
 
-function HeaderMenu() {
+function HeaderMenu({ children }) {
 	const navigate = useNavigate();
 
 	return (
 		<StyledHeaderMenu>
+			{children ? <li>{children}</li> : ''}
 			<li>
 				<ButtonIcon onClick={() => navigate('/account')}>
 					<HiOutlineUser />
