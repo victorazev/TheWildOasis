@@ -12,9 +12,18 @@ import TodayActivity from '../check-in-out/TodayActivity';
 
 const StyledDashboardLayout = styled.div`
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr;
-	grid-template-rows: auto 34rem auto;
-	gap: 2.4rem;
+	/* grid-template-columns: 100vw auto;
+	grid-template-rows: 1fr; */
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: auto;
+	gap: 1.5rem;
+
+	@media (min-width: 768px) {
+		gap: 2.4rem;
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr 1fr;
+		grid-template-rows: auto auto auto;
+	}
 `;
 
 function DashboardLayout() {
@@ -31,20 +40,21 @@ function DashboardLayout() {
 		return <Spinner />;
 
 	return (
-		<StyledDashboardLayout>
-			<Stats
-				bookings={bookings}
-				confirmedStays={confirmedStays}
-				numDays={numDays}
-				cabinCount={cabins.length}
-			/>
+		<>
+			<StyledDashboardLayout>
+				<Stats
+					bookings={bookings}
+					confirmedStays={confirmedStays}
+					numDays={numDays}
+					cabinCount={cabins.length}
+				/>
+				<TodayActivity />
 
-			<TodayActivity />
+				<DurationChart confirmedStays={confirmedStays} />
 
-			<DurationChart confirmedStays={confirmedStays} />
-
-			<SalesChart bookings={bookings} numDays={numDays} />
-		</StyledDashboardLayout>
+				<SalesChart bookings={bookings} numDays={numDays} />
+			</StyledDashboardLayout>
+		</>
 	);
 }
 
